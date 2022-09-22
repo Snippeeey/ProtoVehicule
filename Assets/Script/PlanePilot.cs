@@ -26,7 +26,8 @@ public class PlanePilot : MonoBehaviour
     private void rotation()
     {
        
-        transform.Rotate(Input.GetAxis("Vertical"), 0.0f, -Input.GetAxis("Horizontal"));
+       // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
+        transform.Rotate(Input.GetAxis("Vertical") , 0.0f, -Input.GetAxis("Horizontal") );
     }
     private void movement()
     {
@@ -49,7 +50,7 @@ public class PlanePilot : MonoBehaviour
         float terrainHeightWhereWeAre = Terrain.activeTerrain.SampleHeight(transform.position);
         if (terrainHeightWhereWeAre > transform.position.y)
         {
-
+            Debug.Log("boom");
         }
         
     }
