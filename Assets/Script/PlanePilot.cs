@@ -29,7 +29,7 @@ public class PlanePilot : MonoBehaviour
     }
     private void movement()
     {
-        transform.position += transform.forward * Time.deltaTime * speed;
+        transform.position += transform.forward * Time.deltaTime * (speed+accéleration);
         speed -= transform.forward.y*Time.deltaTime*decélerationpower;
         if (speed<=35)
         {
@@ -52,5 +52,12 @@ public class PlanePilot : MonoBehaviour
         }
         
     }
+    private void acceleration()
+    {
+        //speed = speed + accéleration;
+        float InputValue = Input.GetAxis("Fire1");
+        accéleration = Mathf.Lerp(0, InputValue, 5) * 150;
+       
 
+    }
 }
