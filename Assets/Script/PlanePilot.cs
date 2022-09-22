@@ -21,6 +21,7 @@ public class PlanePilot : MonoBehaviour
         movement();
         CamMovement();
         groundcolliding();
+        acceleration();
     }
     private void rotation()
     {
@@ -56,7 +57,7 @@ public class PlanePilot : MonoBehaviour
     {
         //speed = speed + accéleration;
         float InputValue = Input.GetAxis("Fire1");
-        accéleration = Mathf.Lerp(0, InputValue, 5) * 150;
+        accéleration = Mathf.Lerp(0, InputValue, 0.5f) * 150;
        
 
     }
