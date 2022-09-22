@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PlanePilot : MonoBehaviour
 {
-    public float speed;
-    public float accéleration;
+    public float speed,minspeed;
+    public float accéleration,maxacceleration;
     public float decélerationpower;
     public float camBias = 0.96f;
+    public float TimeToAccelerate = 1f;
+    private Rigidbody rg;
     // Start is called before the first frame update
     void Start()
     {
-        
+        rg = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -21,6 +23,7 @@ public class PlanePilot : MonoBehaviour
         movement();
         CamMovement();
         groundcolliding();
+        acceleration();
     }
     private void rotation()
     {
@@ -29,11 +32,11 @@ public class PlanePilot : MonoBehaviour
     }
     private void movement()
     {
-        transform.position += transform.forward * Time.deltaTime * speed;
+        rg.AddForce(transform.forward * speed);
         speed -= transform.forward.y*Time.deltaTime*decélerationpower;
-        if (speed<=35)
+        if (speed<=minspeed)
         {
-            speed = 35;
+            speed = minspeed;
         }
     }
     private void CamMovement()
@@ -50,6 +53,14 @@ public class PlanePilot : MonoBehaviour
         {
 
         }
+        
+    }
+    private void acceleration()
+    {
+        //speed = speed + accéleration;
+        float InputValue = Input.GetAxis("Fire1");
+        accéleration = Mathf.Lerp(0, InputValue, TimeToAccelerate) * maxacceleration;
+        rg.AddForce(transform.forward*accéleration);
         
     }
 
