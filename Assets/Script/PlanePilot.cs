@@ -8,6 +8,8 @@ public class PlanePilot : MonoBehaviour
     public float accéleration;
     public float decélerationpower;
     public float camBias = 0.96f;
+    private RaycastHit hitF;
+    public float maxDistanceF = 300f;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +29,7 @@ public class PlanePilot : MonoBehaviour
     {
        
        // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
-        transform.Rotate(Input.GetAxis("Vertical") , 0.0f, -Input.GetAxis("Horizontal") );
+        transform.Rotate(-Input.GetAxis("Vertical")/2 , 0.0f, Input.GetAxis("Horizontal")/3 );
     }
     private void movement()
     {
@@ -61,5 +63,48 @@ public class PlanePilot : MonoBehaviour
         accéleration = Mathf.Lerp(0, InputValue, 0.5f) * 150;
        
 
+    }
+   
+    void OnDrawGizmos()
+    {
+       
+
+
+        bool isHitF = Physics.BoxCast(transform.position, transform.localScale , direction: transform.forward, out hitF,
+        transform.rotation, Mathf.Infinity);
+       
+        if (isHitF)
+        {
+           
+
+
+            //stopmove();
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(from: transform.position, direction: transform.forward * hitF.distance);
+            //Gizmos.DrawWireCube(center: transform.position + transform.forward * hitF.distance, size: transform.localScale);
+
+
+
+
+
+
+        }
+        else if (!isHitF)
+        {
+
+           
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(from: transform.position, direction: transform.forward * maxDistanceF);
+
+
+
+
+        }
+       
+
+    }
+    IEnumerator AutoRecover()
+    {
+        yield return new WaitForSeconds(0);
     }
 }
