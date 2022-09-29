@@ -13,12 +13,13 @@ public class PlanePilot : MonoBehaviour
     public float maxDistanceF = 300f;
     public Camera cam;
     private Vector3 target;
-    public Texture Crosshair;
+    public RectTransform Crosshair;
+    public RectTransform targetCanvas;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -29,7 +30,9 @@ public class PlanePilot : MonoBehaviour
         CamMovement();
         groundcolliding();
         acceleration();
-        Cursor();
+        RepositionnateCrossair();
+
+
     }
     private void rotation()
     {
@@ -78,7 +81,7 @@ public class PlanePilot : MonoBehaviour
 
 
 
-    private void OnDrawGizmos()
+    private void SetCursor()
     {
 
 
@@ -86,7 +89,8 @@ public class PlanePilot : MonoBehaviour
         bool isHitF = Physics.BoxCast(transform.position, transform.localScale, direction: transform.forward, out hitF,
         transform.rotation, Mathf.Infinity);
 
-        target = Camera.main.WorldToScreenPoint(hitF.point);
+        target = hitF.point;
+        Debug.Log(target);
         if (isHitF)
         {
 
@@ -117,16 +121,28 @@ public class PlanePilot : MonoBehaviour
 
 
     }
-    void OnGUI()
+    public void SetHealthBarData(Transform targetTransform, RectTransform healthBarPanel)
     {
-        Vector2 vector2 = GUIUtility.ScreenToGUIPoint(new Vector2(target.x, target.y));
-        Rect labelRect = new Rect();
-        labelRect.x = vector2.x;
-        labelRect.y = vector2.y;
-        labelRect.width = Crosshair.width;
-        labelRect.height = Crosshair.height;
+        this.targetCanvas = healthBarPanel;
+        Crosshair = GetComponent<RectTransform>();
+        target = targetTransform;
+        RepositionHealthBar();
+        healthBar.gameObject.SetActive(true);
+    }
+    public void RepositionnateCrossair()
+    {
+        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target);
+        Vector2 WorldObject_ScreenPosition = new Vector2(
+        ((ViewportPosition.x * targetCanvas.sizeDelta.x) - (targetCanvas.sizeDelta.x * 0.5f)),
+        ((ViewportPosition.y * targetCanvas.sizeDelta.y) - (targetCanvas.sizeDelta.y * 0.45f)));
+        Crosshair.anchoredPosition = WorldObject_ScreenPosition;
 
-        GUI.DrawTexture(labelRect, Crosshair);
+
+
+        /*elRect.width = Crosshair.GetComponent<Rect>().height;
+        labelRect.height = Crosshair.GetComponent<Rect>().width;*/
+
+        //GUI.DrawTexture(labelRect, Crosshair);
 
     }
 
