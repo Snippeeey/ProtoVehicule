@@ -15,6 +15,7 @@ public class PlanePilot : MonoBehaviour
     private Vector3 target;
     public RectTransform Crosshair;
     public RectTransform targetCanvas;
+    public GameObject Cursor;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +32,7 @@ public class PlanePilot : MonoBehaviour
         groundcolliding();
         acceleration();
         RepositionnateCrossair();
-
+        OnDrawGizmo();
 
     }
     private void rotation()
@@ -73,15 +74,15 @@ public class PlanePilot : MonoBehaviour
 
 
     }
-    public void Cursor()
+   /* public void Cursor()
     {
        /* Vector3 screenPos = cam.WorldToScreenPoint(target.position);
-        Crosshair.(screenPos);*/
-    }
+        Crosshair.(screenPos);
+    }*/
 
 
 
-    private void SetCursor()
+     private void OnDrawGizmo()
     {
 
 
@@ -90,6 +91,7 @@ public class PlanePilot : MonoBehaviour
         transform.rotation, Mathf.Infinity);
 
         target = hitF.point;
+
         Debug.Log(target);
         if (isHitF)
         {
@@ -121,20 +123,22 @@ public class PlanePilot : MonoBehaviour
 
 
     }
-    public void SetHealthBarData(Transform targetTransform, RectTransform healthBarPanel)
+    public void SetHealthBarData(Vector3 targetTransform, RectTransform healthBarPanel)
     {
         this.targetCanvas = healthBarPanel;
         Crosshair = GetComponent<RectTransform>();
         target = targetTransform;
-        RepositionHealthBar();
-        healthBar.gameObject.SetActive(true);
+        RepositionnateCrossair();
+        Crosshair.gameObject.SetActive(true);
     }
     public void RepositionnateCrossair()
     {
+        Crosshair.gameObject.transform.SetParent(targetCanvas, false);
         Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target);
         Vector2 WorldObject_ScreenPosition = new Vector2(
         ((ViewportPosition.x * targetCanvas.sizeDelta.x) - (targetCanvas.sizeDelta.x * 0.5f)),
-        ((ViewportPosition.y * targetCanvas.sizeDelta.y) - (targetCanvas.sizeDelta.y * 0.45f)));
+        ((ViewportPosition.y * targetCanvas.sizeDelta.y) - (targetCanvas.sizeDelta.y * 0.5f)));
+        Debug.Log(target);
         Crosshair.anchoredPosition = WorldObject_ScreenPosition;
 
 

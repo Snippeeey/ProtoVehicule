@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetHealtBar : MonoBehaviour
+public class Generate : MonoBehaviour
 {
     private RectTransform _canvasGameUI;
     private GameObject Cursor, _floatingText;
+    private PlanePilot PP;
     void Start()
     {
 
-
+        PP = FindObjectOfType<PlanePilot>();
         _canvasGameUI = GameObject.Find("Canvas_GameUI").GetComponent<RectTransform>();
         GenerateHealthBar();
     }
@@ -17,6 +18,9 @@ public class SetHealtBar : MonoBehaviour
     private void GenerateHealthBar()
     {
         //Cursor = Instantiate(_healthBarPrefab) as GameObject;
-        Cursor.transform.SetParent(_canvasGameUI, false);
+        //Cursor.GetComponent<PlanePilot>().SetHealthBarData(this.transform, _canvasGameUI);
+        //PP.SetHealthBarData()
+
+        //Cursor.transform.SetParent(_canvasGameUI, false);
     }
-}   
+}
