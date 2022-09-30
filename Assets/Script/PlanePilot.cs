@@ -22,6 +22,10 @@ public class PlanePilot : MonoBehaviour
     {
         
     }
+    private void FixedUpdate()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -139,6 +143,7 @@ public class PlanePilot : MonoBehaviour
         ((ViewportPosition.x * targetCanvas.sizeDelta.x) - (targetCanvas.sizeDelta.x * 0.5f)),
         ((ViewportPosition.y * targetCanvas.sizeDelta.y) - (targetCanvas.sizeDelta.y * 0.5f)));
         Debug.Log(target);
+
         Crosshair.anchoredPosition = WorldObject_ScreenPosition;
 
 
