@@ -14,6 +14,7 @@ public class AimingPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
         transform.LookAt(Plane.transform);
     }
 }

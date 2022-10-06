@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlanePilot : MonoBehaviour
 {
+    public float rotationValue;
     public float speed;
     public float accéleration;
     public float decélerationpower;
@@ -15,7 +16,8 @@ public class PlanePilot : MonoBehaviour
     private Vector3 target;
     public RectTransform Crosshair;
     public RectTransform targetCanvas;
-    public GameObject Cursor;
+    public GameObject Cursor,pivot;
+    public CinemachineRecomposer rc;
 
     // Start is called before the first frame update
     void Start()
@@ -30,22 +32,24 @@ public class PlanePilot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rotation();
-        movement();
-        CamMovement();
-        groundcolliding();
-        acceleration();
+        Rotation();
+        Movement();
+        //CamMovement();
+        Groundcolliding();
+        Acceleration();
         RepositionnateCrossair();
         OnDrawGizmo();
 
     }
-    private void rotation()
+    private void Rotation()
     {
 
         // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
-        transform.Rotate(-Input.GetAxis("Vertical") / 2, 0.0f, Input.GetAxis("Horizontal") / 3);
+        transform.Rotate(-Input.GetAxis("Vertical") / 2, rotationValue, -Input.GetAxis("Horizontal") /2);
+        rc.m_Dutch = transform.localEulerAngles.z;
+
     }
-    private void movement()
+    private void Movement()
     {
         transform.position += transform.forward * Time.deltaTime * (speed + accéleration);
         speed -= transform.forward.y * Time.deltaTime * decélerationpower;
@@ -53,6 +57,17 @@ public class PlanePilot : MonoBehaviour
         {
             speed = 35;
         }
+        if (Input.GetButton("RB"))
+        {
+            rotationValue = 0.2f;
+        }
+        else if (Input.GetButton("LB"))
+        {
+            rotationValue = -0.2f;
+        }
+        else
+            rotationValue = 0;
+
     }
     private void CamMovement()
     {
@@ -60,8 +75,9 @@ public class PlanePilot : MonoBehaviour
         Camera.main.transform.position = Camera.main.transform.position * camBias + moveCamTo * (1.0f - camBias); ;
 
         Camera.main.transform.LookAt(transform.position + transform.forward * 30f);
+        Camera.main.transform.Rotate(Camera.main.transform.rotation.x, Camera.main.transform.rotation.y, transform.rotation.z);
     }
-    private void groundcolliding()
+    private void Groundcolliding()
     {
         float terrainHeightWhereWeAre = Terrain.activeTerrain.SampleHeight(transform.position);
         if (terrainHeightWhereWeAre > transform.position.y)
@@ -70,7 +86,7 @@ public class PlanePilot : MonoBehaviour
         }
 
     }
-    private void acceleration()
+    private void Acceleration()
     {
         //speed = speed + accéleration;
         float InputValue = Input.GetAxis("Fire1");
