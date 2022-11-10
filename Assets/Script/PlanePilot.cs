@@ -16,8 +16,13 @@ public class PlanePilot : MonoBehaviour
     private Vector3 target;
     public RectTransform Crosshair;
     public RectTransform targetCanvas;
-    public GameObject Cursor,pivot;
+    public GameObject Cursor, pivot;
     public CinemachineRecomposer rc;
+    private Transform ennemieTransform;
+    private GameObject targetedennemie;
+    public GameObject homingMissile;
+    public Transform missilePoint1,missilePoint2;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -39,13 +44,16 @@ public class PlanePilot : MonoBehaviour
         Acceleration();
         RepositionnateCrossair();
         OnDrawGizmo();
+        EnnemiDetection();
+        FireMissile();
+
 
     }
     private void Rotation()
     {
 
         // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
-        transform.Rotate(-Input.GetAxis("Vertical") / 2, rotationValue, -Input.GetAxis("Horizontal") /2);
+        transform.Rotate(-Input.GetAxis("Vertical") /1.5f, rotationValue, -Input.GetAxis("Horizontal")/1.3f );
         rc.m_Dutch = transform.localEulerAngles.z;
 
     }
@@ -112,15 +120,15 @@ public class PlanePilot : MonoBehaviour
 
         target = hitF.point;
 
-        Debug.Log(target);
+        //Debug.Log(target);
         if (isHitF)
         {
 
 
-
+            
             //stopmove();
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(from: transform.position, direction: transform.forward * hitF.distance);
+            /*Gizmos.color = Color.red;
+            Gizmos.DrawRay(from: transform.position, direction: transform.forward * hitF.distance);*/
             //Gizmos.DrawWireCube(center: transform.position + transform.forward * hitF.distance, size: transform.localScale);
 
 
@@ -133,8 +141,8 @@ public class PlanePilot : MonoBehaviour
         {
 
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(from: transform.position, direction: transform.forward * maxDistanceF);
+            /*Gizmos.color = Color.green;
+            Gizmos.DrawRay(from: transform.position, direction: transform.forward * maxDistanceF);*/
 
 
 
@@ -158,7 +166,7 @@ public class PlanePilot : MonoBehaviour
         Vector2 WorldObject_ScreenPosition = new Vector2(
         ((ViewportPosition.x * targetCanvas.sizeDelta.x) - (targetCanvas.sizeDelta.x * 0.5f)),
         ((ViewportPosition.y * targetCanvas.sizeDelta.y) - (targetCanvas.sizeDelta.y * 0.5f)));
-        Debug.Log(target);
+        //Debug.Log(target);
 
         Crosshair.anchoredPosition = WorldObject_ScreenPosition;
 
@@ -170,6 +178,29 @@ public class PlanePilot : MonoBehaviour
         //GUI.DrawTexture(labelRect, Crosshair);
 
     }
+    public void EnnemiDetection()
+    {
+
+
+        if (hitF.transform.gameObject.GetComponent<Ennemie>() == true )
+        {
+            
+            ennemieTransform = hitF.transform.gameObject.transform;
+              
+           
+        }
+       
+    }
+    private void FireMissile()
+    {
+        Debug.Log("fire");
+        if(Input.GetButtonDown("fire1") && ennemieTransform != null)
+        {
+            Instantiate(homingMissile,missilePoint1.position,missilePoint1.rotation);
+            homingMissile.GetComponent<HomingMissile>().RocketTarget=ennemieTransform;
+
+        }
+    }
 
     IEnumerator AutoRecover()
     {
@@ -177,10 +208,38 @@ public class PlanePilot : MonoBehaviour
     }
 }
 
-    
-       
-    
 
-   
 
-      
+
+/*if (ennemieTransform != null)
+{
+    for (int i = 0; i > ennemieTransform.Count; i++)
+    {
+        if (hitF.transform != ennemieTransform[i])
+        {
+            locked = false;
+
+        }
+        else if (hitF.transform == ennemieTransform[i])
+        {
+            locked = true;
+        }
+
+    }
+    if (!locked)
+    {
+        ennemieTransform.Add(hitF.transform);
+        Debug.Log(locked);
+        locked = true;
+    }
+
+}
+if (ennemieTransform == null)
+
+{
+    Debug.Log("Get");
+    Debug.Log(ennemieTransform[0]);
+    ennemieTransform.Add(hitF.transform);
+}*/
+
+

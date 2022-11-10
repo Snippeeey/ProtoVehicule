@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - AimingPlane
+  - Ennemie
+  - Target
+  - Missile
   layers:
   - Default
   - TransparentFX
