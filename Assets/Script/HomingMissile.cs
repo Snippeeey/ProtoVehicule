@@ -16,8 +16,8 @@ public class HomingMissile : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        WaitBoom();
+    { 
+       StartCoroutine(WaitBoom());
         if (!RocketTarget)
             Debug.Log("Please set the Rocket Target");
 
@@ -53,7 +53,7 @@ public class HomingMissile : MonoBehaviour
     }
     IEnumerator WaitBoom()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSecondsRealtime(7f);
         Instantiate(explosion, transform.position, transform.rotation);
         Destroy(gameObject);
     }
