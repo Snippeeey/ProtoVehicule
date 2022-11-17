@@ -17,17 +17,18 @@ public class PlanePilot : MonoBehaviour
     public RectTransform Crosshair;
     public RectTransform targetCanvas;
     public GameObject Cursor, pivot;
-    public CinemachineRecomposer rc;
+    public CinemachineRecomposer rc3P,rc1P;
     private Transform ennemieTransform;
     private GameObject targetedennemie;
     public GameObject homingMissile;
     public Transform missilePoint1,missilePoint2;
-    
+    private Animator _CMVCamStateDrivenCamera;
+    private bool switchCMVc;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _CMVCamStateDrivenCamera = GameObject.FindGameObjectWithTag("StateCam").GetComponent<Animator>();
     }
     private void FixedUpdate()
     {
@@ -47,6 +48,20 @@ public class PlanePilot : MonoBehaviour
         EnnemiDetection();
         FireMissile();
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("YYYYY");
+            if(switchCMVc)
+            {
+                SwitchCam("CMVcam2");
+                switchCMVc = false;
+            }
+            else
+            {
+                switchCMVc = true;
+                SwitchCam("CMVcam1");
+            }
+        }
 
     }
     private void Rotation()
@@ -54,7 +69,8 @@ public class PlanePilot : MonoBehaviour
 
         // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
         transform.Rotate(-Input.GetAxis("Vertical") /1.5f, rotationValue, -Input.GetAxis("Horizontal")/1.3f );
-        rc.m_Dutch = transform.localEulerAngles.z;
+        rc3P.m_Dutch = transform.localEulerAngles.z;
+        rc1P.m_Dutch = transform.localEulerAngles.z;
 
     }
     private void Movement()
@@ -90,7 +106,7 @@ public class PlanePilot : MonoBehaviour
         float terrainHeightWhereWeAre = Terrain.activeTerrain.SampleHeight(transform.position);
         if (terrainHeightWhereWeAre > transform.position.y)
         {
-            Debug.Log("boom");
+            //Debug.Log("boom");
         }
 
     }
@@ -193,7 +209,7 @@ public class PlanePilot : MonoBehaviour
     }
     private void FireMissile()
     {
-        Debug.Log("fire");
+        //Debug.Log("fire");
         if(Input.GetButtonDown("fire1") && ennemieTransform != null)
         {
             Instantiate(homingMissile,missilePoint1.position,missilePoint1.rotation);
@@ -205,6 +221,11 @@ public class PlanePilot : MonoBehaviour
     IEnumerator AutoRecover()
     {
         yield return new WaitForSeconds(0);
+    }
+
+    public void SwitchCam(string cameraToSwitch)
+    {
+        _CMVCamStateDrivenCamera.Play(cameraToSwitch);
     }
 }
 

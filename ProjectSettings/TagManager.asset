@@ -8,6 +8,7 @@ TagManager:
   - Ennemie
   - Target
   - Missile
+  - StateCam
   layers:
   - Default
   - TransparentFX
