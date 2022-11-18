@@ -70,7 +70,7 @@ public class PlanePilot : MonoBehaviour
         // transform.Rotate(Input.GetAxis("Vertical")/2, 0.0f, -Input.GetAxis("Horizontal")/2);
         transform.Rotate(-Input.GetAxis("Vertical") /1.5f, rotationValue, -Input.GetAxis("Horizontal")/1.3f );
         rc3P.m_Dutch = transform.localEulerAngles.z;
-        rc1P.m_Dutch = transform.localEulerAngles.z;
+        //rc1P.m_Dutch = transform.localEulerAngles.z;
 
     }
     private void Movement()
